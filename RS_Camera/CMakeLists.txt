@@ -1,4 +1,4 @@
-project(Realsense_Camera)
+project(RealSense_Camera)
 
 add_library(
         ${PROJECT_NAME} SHARED
