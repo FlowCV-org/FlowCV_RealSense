@@ -1,6 +1,5 @@
 Build/
-cmake-build-release/
-cmake-build-debug/
+cmake-build*/
 .idea/
 CMakeLists.txt.user
 CMakeCache.txt

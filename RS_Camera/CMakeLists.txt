@@ -2,6 +2,7 @@ project(RealSense_Camera)
 
 add_library(
         ${PROJECT_NAME} SHARED
+        realsense_plugin.cpp
         realsense_camera.cpp
         ${IMGUI_SRC}
         ${DSPatch_SRC}
