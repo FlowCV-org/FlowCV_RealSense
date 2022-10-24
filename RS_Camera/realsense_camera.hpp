@@ -74,6 +74,7 @@ class realsense_camera {
     const std::vector<std::string> &GetDeviceList();
     bool InitCamera(int index);
     bool IsInit();
+    bool IsReconfiguring() const;
     std::vector<StreamConfig> *GetStreamConfigList(rs2_stream stream_type);
     std::vector<Property> *GetPropertyList(rs2_stream stream_type);
     std::vector<filter_options> *GetFilterList(rs2_stream stream_type);

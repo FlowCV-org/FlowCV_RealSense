@@ -282,7 +282,6 @@ void realsense_camera::ReconfigureDevice_()
                 depth_frame_ = cv::Mat();
 
             pipe_profile_ = pipe_.start(cfg_);
-            reconfigure_ = false;
 
             // Get Current Properties from Device
             for (auto &pr: color_props_) {
@@ -297,6 +296,8 @@ void realsense_camera::ReconfigureDevice_()
                 rs2_get_video_stream_intrinsics(pipe_profile_.get_stream(RS2_STREAM_COLOR), &rsRGBIntrinsics_, &e);
             if (is_depth_streaming_)
                 rs2_get_video_stream_intrinsics(pipe_profile_.get_stream(RS2_STREAM_DEPTH), &rsDepthIntrinsics_, &e);
+
+            reconfigure_ = false;
         }
     }
 }
@@ -613,6 +614,11 @@ void realsense_camera::SetStreamAlignment(StreamAlignment align)
     } else {
         rs2_get_video_stream_intrinsics(pipe_profile_.get_stream(RS2_STREAM_DEPTH), &rsDepthIntrinsics_, &e);
     }
+}
+
+bool realsense_camera::IsReconfiguring() const
+{
+    return reconfigure_;
 }
 
 bool FilterOptions::is_all_integers(const rs2::option_range& range)

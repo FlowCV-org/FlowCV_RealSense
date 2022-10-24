@@ -59,18 +59,19 @@ RealsenseCamera::RealsenseCamera()
 
 void RealsenseCamera::Process_( SignalBus const& inputs, SignalBus& outputs )
 {
+
     std::lock_guard<std::mutex> lck(io_mutex_);
     camera_->ProcessStreams();
-    if (!camera_->GetFrame(RS2_STREAM_COLOR).empty()) {
-        cv::Mat out_color;
-        camera_->GetFrame(RS2_STREAM_COLOR).copyTo(out_color);
-        outputs.SetValue(0, out_color);
+    if (!camera_->IsReconfiguring()) {
+        if (!camera_->GetFrame(RS2_STREAM_COLOR).empty()) {
+            outputs.SetValue(0, camera_->GetFrame(RS2_STREAM_COLOR));
+        }
+        if (!camera_->GetFrame(RS2_STREAM_DEPTH).empty()) {
+            outputs.SetValue(1, camera_->GetFrame(RS2_STREAM_DEPTH));
+        }
+        if (!camera_->GetMetaData().empty())
+            outputs.SetValue(2, camera_->GetMetaData());
     }
-    if (!camera_->GetFrame(RS2_STREAM_DEPTH).empty()) {
-        outputs.SetValue(1, camera_->GetFrame(RS2_STREAM_DEPTH));
-    }
-    if (!camera_->GetMetaData().empty())
-        outputs.SetValue(2, camera_->GetMetaData());
 }
 
 bool RealsenseCamera::HasGui(int interface)
