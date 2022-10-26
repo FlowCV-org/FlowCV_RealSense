@@ -102,7 +102,7 @@ void RealsenseCamera::UpdateGui(void *context, int interface)
             enable_depth_ = false;
             camera_->InitCamera(selected_camera_idx_);
         }
-        if (selected_camera_idx_ > 0) {
+        if (selected_camera_idx_ > 0 && camera_->IsInit()) {
             //
             // Common Controls
             //
@@ -356,7 +356,7 @@ std::string RealsenseCamera::GetState()
 
     json state;
 
-    if (selected_camera_idx_ > 0) {
+    if (selected_camera_idx_ > 0 && camera_->IsInit()) {
         state["cam_idx"] = selected_camera_idx_;
         state["rs_serial"] = camera_->GetDeviceSerial(selected_camera_idx_);
         state["color_enabled"] = enable_color_;
@@ -379,7 +379,7 @@ std::string RealsenseCamera::GetState()
             auto depth_cfg_list = camera_->GetStreamConfigList(rs2_stream::RS2_STREAM_DEPTH);
             auto depth_props = camera_->GetPropertyList(RS2_STREAM_DEPTH);
             state["depth_fps_idx"] = depth_cfg_list->at(depth_cfg_idx_).fps_idx;
-            state["depth_fps"] = depth_cfg_list->at(color_cfg_idx_).fps_list.at(depth_cfg_list->at(depth_cfg_idx_).fps_idx);
+            state["depth_fps"] = depth_cfg_list->at(depth_cfg_idx_).fps_list.at(depth_cfg_list->at(depth_cfg_idx_).fps_idx);
             state["depth_res_idx"] = depth_cfg_idx_;
             nlohmann::json depth_controls;
             for(const auto &prop : *depth_props) {

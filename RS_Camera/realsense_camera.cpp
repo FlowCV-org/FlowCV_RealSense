@@ -76,7 +76,7 @@ const std::vector<std::string> &realsense_camera::GetDeviceList()
     return camera_name_list_;
 }
 
-bool realsense_camera::InitCamera(int index)
+void realsense_camera::InitCamera_()
 {
     std::lock_guard<std::mutex> lck(io_mutex_);
     if (is_init_) {
@@ -84,15 +84,13 @@ bool realsense_camera::InitCamera(int index)
             pipe_.stop();
             cfg_.disable_all_streams();
         }
-        is_color_enabled_ = false;
-        is_depth_enabled_ = false;
         is_color_streaming_ = false;
         is_depth_streaming_ = false;
     }
 
     is_init_ = false;
-    if (index > 0 && index < camera_dev_list_.size() + 1) {
-        active_dev_idx_ = index - 1;
+    if (init_idx_ > 0 && init_idx_ < camera_dev_list_.size() + 1) {
+        active_dev_idx_ = init_idx_ - 1;
         color_configs_.clear();
         color_props_.clear();
         depth_props_.clear();
@@ -243,7 +241,15 @@ bool realsense_camera::InitCamera(int index)
         }
         is_init_ = true;
     }
-    return is_init_;
+    init_ = false;
+}
+
+void realsense_camera::InitCamera(int index)
+{
+    is_color_enabled_ = false;
+    is_depth_enabled_ = false;
+    init_idx_ = index;
+    init_ = true;
 }
 
 void realsense_camera::ReconfigureDevice_()
@@ -336,6 +342,9 @@ void realsense_camera::DisableStream(rs2_stream stream)
 
 void realsense_camera::ProcessStreams()
 {
+    if (init_)
+        InitCamera_();
+
     if (reconfigure_)
         ReconfigureDevice_();
 

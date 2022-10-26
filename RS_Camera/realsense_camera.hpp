@@ -72,7 +72,7 @@ class realsense_camera {
     int GetDeviceCount();
     std::string GetDeviceSerial(int index);
     const std::vector<std::string> &GetDeviceList();
-    bool InitCamera(int index);
+    void InitCamera(int index);
     bool IsInit();
     bool IsReconfiguring() const;
     std::vector<StreamConfig> *GetStreamConfigList(rs2_stream stream_type);
@@ -89,6 +89,7 @@ class realsense_camera {
     void SetStreamAlignment(StreamAlignment align);
 
   protected:
+    void InitCamera_();
     void ReconfigureDevice_();
     void ChangeProperties_();
 
@@ -106,6 +107,8 @@ class realsense_camera {
     rs2_intrinsics rsRGBIntrinsics_{};
     nlohmann::json meta_data_;
     StreamAlignment stream_alignment_;
+    int init_idx_;
+    bool init_;
     bool is_color_enabled_;
     bool is_depth_enabled_;
     bool is_color_streaming_;
