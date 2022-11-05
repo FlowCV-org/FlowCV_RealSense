@@ -244,12 +244,14 @@ void realsense_camera::InitCamera_()
     init_ = false;
 }
 
-void realsense_camera::InitCamera(int index)
+void realsense_camera::InitCamera(int index, bool immediate_mode)
 {
     is_color_enabled_ = false;
     is_depth_enabled_ = false;
     init_idx_ = index;
     init_ = true;
+    if (immediate_mode)
+        InitCamera_();
 }
 
 void realsense_camera::ReconfigureDevice_()

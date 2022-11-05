@@ -72,7 +72,7 @@ class realsense_camera {
     int GetDeviceCount();
     std::string GetDeviceSerial(int index);
     const std::vector<std::string> &GetDeviceList();
-    void InitCamera(int index);
+    void InitCamera(int index, bool immediate_mode = false);
     bool IsInit();
     bool IsReconfiguring() const;
     std::vector<StreamConfig> *GetStreamConfigList(rs2_stream stream_type);

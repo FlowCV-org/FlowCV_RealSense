@@ -27,7 +27,7 @@ RealsenseCamera::RealsenseCamera()
     SetComponentName_("Realsense_Camera");
     SetComponentCategory_(Category::Category_Source);
     SetComponentAuthor_("Richard");
-    SetComponentVersion_("0.2.0");
+    SetComponentVersion_("0.2.1");
     SetInstanceCount(global_inst_counter);
     global_inst_counter++;
 
@@ -437,7 +437,7 @@ void RealsenseCamera::SetState(std::string &&json_serialized)
             }
             if (cam_exists) {
                 std::lock_guard<std::mutex> lck(io_mutex_);
-                camera_->InitCamera(selected_camera_idx_);
+                camera_->InitCamera(selected_camera_idx_, true);
                 if (state.contains("alignment"))
                     alignment_mode_ = state["alignment"].get<int>();
                 else
